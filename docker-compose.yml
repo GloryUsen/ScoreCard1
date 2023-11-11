@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=mvc_dzil_user
+      - POSTGRES_PASSWORD=FQiySvfsJ1tyQFFK7ZppbQGFF8FDNMEk
+    ports:
+      - "5433:5433"
+    volumes:
+      - ./postgres-dataz:/var/lib/postgresql/data
+
+
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "9060:9060"
+    depends_on:
+      db:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_USER=mvc_dzil_user
+      - SPRING_DATASOURCE_PASSWORD=FQiySvfsJ1tyQFFK7ZppbQGFF8FDNMEk
